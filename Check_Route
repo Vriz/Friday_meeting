@@ -1,0 +1,60 @@
+__author__ = 'vriz'
+# !/usr/bin/env python
+#  -*-coding: utf-8-*-
+
+
+from AdJacency_dict_first import Conversion, Connect
+
+
+class CheckForContinuation:
+
+    def __init__(self, diction, lst):
+
+        self.dict = diction
+        self.lst = lst
+
+        self.list_of_links = self.find_links(self.dict, self.lst)
+
+        self.check = self.check_for_connectivity(self.list_of_links)
+        
+    def find_links(self, diction, lst):
+        list_to_return = []
+
+        for key, values in diction.items():
+
+            for link in values[1][0]:
+                if link[0] in lst:
+                    list_to_return.append(link)
+
+        return list_to_return
+
+    def check_for_connectivity(self, lst):
+        
+        star_and_end_list = []
+        for part in lst:
+        
+            star_and_end_list.append(part[8][0])
+            star_and_end_list.append(part[8][-1])
+        count = 0
+        for i in range(0, len(star_and_end_list)):
+            coord = star_and_end_list[i]
+            if star_and_end_list.count(coord) == 1:
+                count += 1
+        if count == 2:
+            return 1
+        else:
+            return 0
+
+
+def main():
+    # Create a connection to the database and the desired tables
+    connection = Connect("NODES", "LINKS")
+    # Create the adjacency Dictionary
+    first = Conversion(connection.nodes, connection.links, connection.cnxn)
+    fifth = CheckForContinuation(first.adjacency_dictionary, [1005612, 1005609, 1005618, 1005615, 1005611, 1037506])
+
+    print fifth.check
+
+
+if __name__ == '__main__':
+    main()
